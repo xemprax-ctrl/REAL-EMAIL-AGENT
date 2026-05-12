@@ -23,8 +23,11 @@ from langgraph.runtime import Runtime
 from langgraph.types import interrupt
 
 
-class FriendlyHumanInTheLoopMiddleware(HumanInTheLoopMiddleware[StateT, ContextT, ResponseT]):
+class FriendlyHumanInTheLoopMiddleware(
+    HumanInTheLoopMiddleware[StateT, ContextT, ResponseT]
+):
     """Extended HITL middleware that handles JSON string resume payloads from Studio."""
+
     def after_model(
         self, state: AgentState[Any], runtime: Runtime[ContextT]
     ) -> dict[str, Any] | None:

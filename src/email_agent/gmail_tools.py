@@ -18,7 +18,7 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
 def gmail_service():
     """Authenticate to Gmail and return the Gmail API service.
-    
+
     Uses token.pickle to cache credentials. If the token is invalid or missing,
     opens an OAuth flow for the user to authorize.
     """
