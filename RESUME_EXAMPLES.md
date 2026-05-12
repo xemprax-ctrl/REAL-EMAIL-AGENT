@@ -13,7 +13,16 @@ Quick accept (no extra fields required):
 ```
 
 ## Edit
-Change the tool call before the agent executes it. Example edits the `send_email` args:
+Change the tool call before the agent executes it. Use this when you want to modify the email recipient, subject, or body.
+
+**How to edit:**
+1. Replace `recipient@example.com` with the actual recipient email
+2. Update `Updated subject` with the real subject line
+3. Update `Updated body` with the actual email message
+4. Keep the `name` as `send_email` (don't change this)
+5. Paste the entire JSON into Studio and click Resume
+
+**Example (CHANGE THE EMAIL AND TEXT):**
 
 ```json
 {
@@ -23,7 +32,7 @@ Change the tool call before the agent executes it. Example edits the `send_email
       "edited_action": {
         "name": "send_email",
         "args": {
-          "to": "xemprax@gmail.com",
+          "to": "recipient@example.com",
           "subject": "Updated subject",
           "body": "Updated body"
         }
