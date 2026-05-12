@@ -1,0 +1,8 @@
+.env
+.venv/
+.langgraph_api/
+__pycache__/
+*.pyc
+token.pickle
+credentials.json
+
