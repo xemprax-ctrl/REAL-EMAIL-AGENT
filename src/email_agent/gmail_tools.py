@@ -1,3 +1,8 @@
+"""Gmail tools for the email agent.
+
+Provides LangChain tools to check inbox, read emails, and send messages via Gmail API.
+"""
+
 import os
 import pickle
 import base64
@@ -7,10 +12,16 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from email.mime.text import MIMEText
 
+# Gmail API scope: allows reading and sending mail
 SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
 
 def gmail_service():
+    """Authenticate to Gmail and return the Gmail API service.
+    
+    Uses token.pickle to cache credentials. If the token is invalid or missing,
+    opens an OAuth flow for the user to authorize.
+    """
     creds = None
 
     if os.path.exists("token.pickle"):

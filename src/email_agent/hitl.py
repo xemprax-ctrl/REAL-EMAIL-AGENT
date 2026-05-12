@@ -1,3 +1,13 @@
+"""Human-in-the-loop middleware with Studio JSON resume support.
+
+LangChain's HumanInTheLoopMiddleware expects resume payloads as Python dicts,
+but Studio sends them as JSON strings. This wrapper parses the JSON before
+the parent middleware processes it, fixing the "string indices must be integers"
+error and enabling the edit workflow.
+
+Once LangChain fixes this upstream, this wrapper can be removed.
+"""
+
 from __future__ import annotations
 
 import json
@@ -14,6 +24,7 @@ from langgraph.types import interrupt
 
 
 class FriendlyHumanInTheLoopMiddleware(HumanInTheLoopMiddleware[StateT, ContextT, ResponseT]):
+    """Extended HITL middleware that handles JSON string resume payloads from Studio."""
     def after_model(
         self, state: AgentState[Any], runtime: Runtime[ContextT]
     ) -> dict[str, Any] | None:
@@ -83,6 +94,7 @@ class FriendlyHumanInTheLoopMiddleware(HumanInTheLoopMiddleware[StateT, ContextT
             )
             raise ValueError(msg)
 
+        # Apply the human's decisions: approve, reject, respond, or edit each tool call
         revised_tool_calls: list[ToolCall] = []
         artificial_tool_messages: list[ToolMessage] = []
         decision_idx = 0
@@ -93,6 +105,8 @@ class FriendlyHumanInTheLoopMiddleware(HumanInTheLoopMiddleware[StateT, ContextT
                 decision = decisions[decision_idx]
                 decision_idx += 1
 
+                # Process the decision and get back the revised tool call
+                # (or None if rejected) and optional synthetic tool message
                 revised_tool_call, tool_message = self._process_decision(
                     decision, tool_call, config
                 )
